@@ -5,6 +5,8 @@ items:
   kind: Pod
   metadata:
     name: spring-boot
+    labels:
+      app: petclinic
   spec:
     containers:
     - name: server
@@ -17,9 +19,9 @@ items:
       env:
       - name: MYSQL_USER
         value: petclinic
-      - name: MYSQL_ROOT_PASSWORD
-        value: petclinic
       - name: MYSQL_PASSWORD
+        value: petclinic
+      - name: MYSQL_ROOT_PASSWORD
         value: petclinic
       - name: MYSQL_DATABASE
         value: petclinic
@@ -36,7 +38,7 @@ items:
         port: 8080
         targetPort: 8080
     selector:
-      name: petclinic
+      app: petclinic
 - kind: Service
   apiVersion: v1
   metadata:
@@ -47,4 +49,4 @@ items:
         port: 3306
         targetPort: 3360
     selector:
-      name: petclinic
+      app: petclinic
