@@ -4,16 +4,19 @@ items:
 - apiVersion: v1
   kind: Pod
   metadata:
-    name: spring-boot
+    name: petclinic
     labels:
       app: petclinic
   spec:
     containers:
     - name: server
-      image: sleshchenko/petclinic
+      image: mariolet/petclinic
       ports:
       - containerPort: 8080
         protocol: TCP
+      resources:
+        limits:
+        memory: 512Mi
     - name: mysql
       image: centos/mysql-57-centos7
       env:
@@ -28,10 +31,15 @@ items:
       ports:
       - containerPort: 3306
         protocol: TCP
+      resources:
+        limits:
+        memory: 512Mi
 - kind: Service
   apiVersion: v1
   metadata:
     name: petclinic
+    labels:
+      app: petclinic
   spec:
     ports:
       - name: web
@@ -43,6 +51,8 @@ items:
   apiVersion: v1
   metadata:
     name: mysql
+    labels:
+      app: petclinic
   spec:
     ports:
       - name: mysql
@@ -50,3 +60,4 @@ items:
         targetPort: 3360
     selector:
       app: petclinic
+
