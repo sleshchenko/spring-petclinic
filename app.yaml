@@ -28,12 +28,19 @@ items:
         value: petclinic
       - name: MYSQL_DATABASE
         value: petclinic
+      volumeMounts:
+      - mountPath: /var/lib/mysql/data
+        name: mysql-storage
       ports:
       - containerPort: 3306
         protocol: TCP
       resources:
         limits:
         memory: 512Mi
+    volumes:
+    - name: mysql-storage
+      persistentVolumeClaim:
+        claimName: mysql-storage
 - kind: Service
   apiVersion: v1
   metadata:
@@ -60,4 +67,15 @@ items:
         targetPort: 3360
     selector:
       app: petclinic
-
+- kind: PersistentVolumeClaim
+  apiVersion: v1
+  metadata:
+    labels:
+      app: petclinic
+    name: mysql-storage
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi`
