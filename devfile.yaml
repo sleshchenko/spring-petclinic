@@ -5,27 +5,35 @@ projects:
     source:
       type: git
       location: 'https://github.com/mshaposhnik/spring-petclinic.git'
-tools:
-  - name: theia-ide
+components:
+  - alias: theia-ide
     type: cheEditor
-    id: org.eclipse.che.editor.theia:1.0.0
-  - name: exec-plugin
-    type: chePlugin
-    id: che-machine-exec-plugin:0.0.1
-  - name: mysql
+    id: org.eclipse.che.editor.theia:next
+  - alias: mysql
     type: openshift
     local: petclinic.yaml
     selector:
       app.kubernetes.io/name: mysql
       app.kubernetes.io/component: database
       app.kubernetes.io/part-of: petclinic
+  - alias: petclinic
+    type: openshift
+    local: petclinic.yaml
+    selector:
+      app.kubernetes.io/name: petclinic
+      app.kubernetes.io/component: database
+      app.kubernetes.io/part-of: petclinic
 commands:
   - name: build
     actions:
       - type: exec
-        tool: theia-ide
+        component: theia-ide
         command: './mvnw package'
         workdir: /projects/spring-petclinic
+  - name: run
+    actions:
+      - type: exec
+        component
   - name: mysql-version
     actions:
       - type: exec

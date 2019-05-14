@@ -6,17 +6,75 @@ items:
   metadata:
     name: petclinic
     labels:
-      app: petclinic
+      app.kubernetes.io/name: petclinic
+      app.kubernetes.io/component: web-app
   spec:
     containers:
     - name: server
-      image: mariolet/petclinic
+      image: sleshchenko/petclinic
       ports:
       - containerPort: 8080
         protocol: TCP
       resources:
         limits:
         memory: 512Mi
+      volumeMounts:
+      - mountPath: /projects
+        name: projects
+    volumes:
+    - name: projects
+      persistentVolumeClaim:
+        claimName: projects
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: petclinic
+    labels:
+      app.kubernetes.io/name: petclinic
+      app.kubernetes.io/component: web-app
+  spec:
+    ports:
+      - name: web
+        port: 8080
+        targetPort: 8080
+    selector:
+      app.kubernetes.io/name: petclinic
+      app.kubernetes.io/component: web-app
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: nodejs-web-endpoint
+    labels:
+      app.kubernetes.io/name: petclinic
+      app.kubernetes.io/component: web-app
+  spec:
+    to:
+      kind: Service
+      name: petclinic
+    port:
+      targetPort: web
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: projects
+    labels:
+      app.kubernetes.io/name: petclinic
+      app.kubernetes.io/component: web-app
+  spec:
+    accessModes:
+     - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    name: mysql-petclinic
+    labels:
+      app.kubernetes.io/name: petclinic
+      app.kubernetes.io/component: mysql
+  spec:
+    containers:
     - name: mysql
       image: centos/mysql-57-centos7
       env:
@@ -44,29 +102,18 @@ items:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: petclinic
-    labels:
-      app: petclinic
-  spec:
-    ports:
-      - name: web
-        port: 8080
-        targetPort: 8080
-    selector:
-      app: petclinic
-- kind: Service
-  apiVersion: v1
-  metadata:
     name: mysql
     labels:
-      app: petclinic
+      app.kubernetes.io/name: petclinic
+      app.kubernetes.io/component: mysql
   spec:
     ports:
       - name: mysql
         port: 3306
-        targetPort: 3360
+        targetPort: 3306
     selector:
-      app: petclinic
+      app.kubernetes.io/name: petclinic
+      app.kubernetes.io/component: mysql
 - kind: PersistentVolumeClaim
   apiVersion: v1
   metadata:
@@ -78,4 +125,4 @@ items:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 1Gi`
+        storage: 1Gi
