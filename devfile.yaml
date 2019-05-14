@@ -97,7 +97,7 @@ components:
               protocol: TCP
             resources:
               limits:
-              memory: 512Mi
+              memory: 2Gi
             volumeMounts:
             - mountPath: /projects
               name: projects
