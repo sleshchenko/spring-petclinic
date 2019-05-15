@@ -4,7 +4,7 @@ projects:
   - name: spring-petclinic
     source:
       type: git
-      location: 'https://github.com/mshaposhnik/spring-petclinic.git'
+      location: 'https://github.com/sleshchenko/spring-petclinic.git'
 components:
   - alias: theia-ide
     type: cheEditor
