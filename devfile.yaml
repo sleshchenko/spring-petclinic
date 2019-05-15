@@ -43,7 +43,7 @@ components:
               protocol: TCP
             resources:
               limits:
-              memory: 512Mi
+                memory: 512Mi
           volumes:
           - name: mysql-storage
             persistentVolumeClaim:
@@ -97,7 +97,10 @@ components:
               protocol: TCP
             resources:
               limits:
-              memory: 2Gi
+                memory: 2Gi
+            env:
+            - name: MAVEN_OPTS
+              value: '-Xmx1500m'
             volumeMounts:
             - mountPath: /projects
               name: projects
