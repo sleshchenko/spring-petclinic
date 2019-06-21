@@ -10,6 +10,8 @@ components:
   - alias: theia-ide
     type: cheEditor
     id: eclipse/che-theia/next
+  - type: chePlugin
+    id: redhat/java/0.43.0
   - alias: mysql
     type: openshift
     referenceContent: |
