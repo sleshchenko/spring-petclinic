@@ -1,6 +1,15 @@
-schemaVersion: 2.0.0
+schemaVersion: 2.2.0
 metadata:
   name: spring-petclinic
+projects:
+  - name: petclinic
+    git:
+      remotes:
+        sleshchenko: git@github.com:l0rd/spring-petclinic.git
+        origin: git@github.com:spring-projects/spring-petclinic.git
+      checkoutFrom:
+        remote: sleshchenko
+        revision: main
 components:
   - name: maven
     container:
